@@ -4,3 +4,9 @@ replay_pid*.log
 
 # Local secrets for docker compose
 .env
+
+# Personal study notes and guides
+NOTAS*.md
+GUIA*.md
+notas/
+guias/

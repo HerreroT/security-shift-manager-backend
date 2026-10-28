@@ -151,7 +151,7 @@ public class ShiftAssignmentService {
         if (!overlapping.isEmpty()) {
             ShiftAssignment conflict = overlapping.get(0);
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(
-                    "Guard already has shift %d at %s from %s to %s",
+                    "El guardia ya tiene el turno %d en %s del %s al %s",
                     conflict.getId(),
                     conflict.getService().getName(),
                     conflict.getStartDateTime().format(DISPLAY_FORMAT),

@@ -32,7 +32,7 @@ public class DataSeeder implements CommandLineRunner {
             @Value("${app.admin.password}") String adminPassword) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.adminEmail = adminEmail;
+        this.adminEmail = adminEmail.trim().toLowerCase();
         this.adminPassword = adminPassword;
     }
 

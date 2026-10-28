@@ -145,7 +145,7 @@ Todos los errores tienen el mismo formato:
   "timestamp": "2026-10-19T19:29:58Z",
   "status": 409,
   "error": "Conflict",
-  "message": "Guard already has shift 194 at Barrio Belgrano from 12/10/2026 08:00 to 12/10/2026 20:00"
+  "message": "El guardia ya tiene el turno 194 en Barrio Belgrano del 12/10/2026 08:00 al 12/10/2026 20:00"
 }
 ```
 
@@ -159,6 +159,8 @@ Ver [DOMAIN_MODEL.md](shiftmanager/DOMAIN_MODEL.md). En resumen:
 - Las horas (`totalHours`) las calcula el servidor.
 - Un guardia no puede tener turnos superpuestos.
 - Los guardias y servicios no se borran, se desactivan, para no perder el historial.
+- Un usuario desactivado pierde el acceso en el momento, aunque tenga un token vigente.
+- Un administrador no puede desactivar su propio usuario.
 
 ## Tests
 
