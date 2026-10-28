@@ -145,7 +145,7 @@ Todos los errores tienen el mismo formato:
   "timestamp": "2026-10-19T19:29:58Z",
   "status": 409,
   "error": "Conflict",
-  "message": "Guard already has shift 194 at Barrio Belgrano from 12/10/2026 08:00 to 12/10/2026 20:00"
+  "message": "El guardia ya tiene el turno 194 en Barrio Belgrano del 12/10/2026 08:00 al 12/10/2026 20:00"
 }
 ```
 
