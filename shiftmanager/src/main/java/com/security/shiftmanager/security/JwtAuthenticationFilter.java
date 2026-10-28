@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,9 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             String token = authHeader.substring(BEARER_PREFIX.length());
-            if (jwtService.isTokenValid(token)) {
-                String email = jwtService.extractSubject(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = activeUser(token);
+            if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -47,5 +47,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * The user behind a valid token, or null. The user is read on every request, so a deactivated
+     * user loses access right away instead of when the token expires.
+     */
+    private UserDetails activeUser(String token) {
+        if (!jwtService.isTokenValid(token)) {
+            return null;
+        }
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractSubject(token));
+            return userDetails.isEnabled() ? userDetails : null;
+        } catch (UsernameNotFoundException e) {
+            return null;
+        }
     }
 }

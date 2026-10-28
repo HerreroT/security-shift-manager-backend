@@ -9,10 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ShiftAssignmentRepository extends JpaRepository<ShiftAssignment, Long> {
 
-    List<ShiftAssignment> findByGuardId(Long guardId);
-
-    List<ShiftAssignment> findByServiceId(Long serviceId);
-
     /**
      * Shifts that overlap the [from, to) window. Every filter is optional.
      */

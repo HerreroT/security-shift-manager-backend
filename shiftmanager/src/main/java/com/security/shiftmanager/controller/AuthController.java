@@ -4,10 +4,11 @@ import com.security.shiftmanager.dto.LoginRequest;
 import com.security.shiftmanager.dto.LoginResponse;
 import com.security.shiftmanager.security.JwtService;
 import com.security.shiftmanager.security.SecurityUser;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,15 +28,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
         try {
             var authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-            var user = securityUser.getUser();
-            String token = jwtService.generateToken(user.getEmail());
-            return new LoginResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getRole());
-        } catch (BadCredentialsException e) {
+                    new UsernamePasswordAuthenticationToken(request.email().trim().toLowerCase(), request.password()));
+            var user = ((SecurityUser) authentication.getPrincipal()).getUser();
+            return LoginResponse.of(jwtService.generateToken(user.getEmail()), user);
+        } catch (AuthenticationException e) {
+            // Same answer for a wrong password, an unknown email or a deactivated user.
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
     }
