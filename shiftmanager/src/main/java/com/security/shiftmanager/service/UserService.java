@@ -50,6 +50,14 @@ public class UserService {
         return UserResponse.from(userRepository.save(user));
     }
 
+    /** An admin cannot deactivate their own account, so there is always someone able to log in. */
+    public UserResponse deactivate(Long id, Long currentUserId) {
+        if (id.equals(currentUserId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot deactivate your own user");
+        }
+        return setActive(id, false);
+    }
+
     public UserResponse setActive(Long id, boolean active) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id " + id));

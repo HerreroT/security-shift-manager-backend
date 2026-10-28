@@ -159,6 +159,8 @@ Ver [DOMAIN_MODEL.md](shiftmanager/DOMAIN_MODEL.md). En resumen:
 - Las horas (`totalHours`) las calcula el servidor.
 - Un guardia no puede tener turnos superpuestos.
 - Los guardias y servicios no se borran, se desactivan, para no perder el historial.
+- Un usuario desactivado pierde el acceso en el momento, aunque tenga un token vigente.
+- Un administrador no puede desactivar su propio usuario.
 
 ## Tests
 
