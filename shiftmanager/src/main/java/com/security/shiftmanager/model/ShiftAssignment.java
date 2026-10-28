@@ -53,24 +53,6 @@ public class ShiftAssignment {
     public ShiftAssignment() {
     }
 
-    public ShiftAssignment(
-            Long id,
-            Guard guard,
-            Service service,
-            LocalDateTime startDateTime,
-            LocalDateTime endDateTime,
-            BigDecimal totalHours,
-            String notes
-    ) {
-        this.id = id;
-        this.guard = guard;
-        this.service = service;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.totalHours = totalHours;
-        this.notes = notes;
-    }
-
     public Long getId() {
         return id;
     }
